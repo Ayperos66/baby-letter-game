@@ -1647,12 +1647,11 @@ html&gt;body{padding:0}&lt;/style&gt;
         &lt;/div&gt;
         &lt;p class=&quot;blg-stats-status&quot; data-stats-status role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;正在確認禮物與載入統計…&lt;/p&gt;
         &lt;button type=&quot;button&quot; class=&quot;blg-stats-refresh&quot; data-stats-refresh&gt;更新統計&lt;/button&gt;
-        &lt;p class=&quot;blg-stats-note&quot;&gt;同一個瀏覽器只計第一次寄出，重玩不會改票。&lt;br&gt;統計從功能啟用後開始。&lt;/p&gt;
+        &lt;p class=&quot;blg-stats-note&quot;&gt;只計第一次寄出，重玩不會改票。&lt;/p&gt;
       &lt;/section&gt;
       &lt;div class=&quot;blg-ending&quot;&gt;一封信，送來一位新家人&lt;/div&gt;
     &lt;/section&gt;
 
-    &lt;footer class=&quot;blg-footer&quot;&gt;一份送給家人的小驚喜&lt;/footer&gt;
     &lt;p class=&quot;blg-sr-only&quot; data-live aria-live=&quot;polite&quot; aria-atomic=&quot;true&quot;&gt;&lt;/p&gt;
   &lt;/main&gt;
 &lt;/div&gt;
@@ -1711,7 +1710,6 @@ html&gt;body{padding:0}&lt;/style&gt;
   #baby-letter-gift-reveal button { font: inherit; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
   #baby-letter-gift-reveal .blg-primary { display: block; width: 100%; min-height: 50px; padding: 12px 14px; border: 0; border-radius: 13px; background: var(--blg-button); color: var(--blg-button-ink); font-size: 15px; font-weight: 500; }
   #baby-letter-gift-reveal .blg-primary:disabled { background: var(--blg-disabled); color: var(--blg-muted); }
-  #baby-letter-gift-reveal .blg-footer { color: var(--blg-muted); text-align: center; font-size: 11px; margin-top: 23px; }
   #baby-letter-gift-reveal [data-color=&quot;blue&quot;] { --blg-toy-ink: var(--blg-blue); --blg-toy-paper: var(--blg-blue-surface); --blg-toy-soft: var(--blg-blue-soft); }
   #baby-letter-gift-reveal [data-color=&quot;pink&quot;] { --blg-toy-ink: var(--blg-pink); --blg-toy-paper: var(--blg-pink-surface); --blg-toy-soft: var(--blg-pink-soft); }
   #baby-letter-gift-reveal .blg-sets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
@@ -1842,7 +1840,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     statsButton.disabled = false;
     statsButton.textContent = valid ? &#x27;更新統計&#x27; : &#x27;重新連線&#x27;;
     if (!valid) {
-      statsStatus.textContent = result?.error === &#x27;storage_unavailable&#x27; ? &#x27;這個瀏覽器無法保存首次紀錄，目前無法計票或載入統計。你仍可照常玩遊戲。&#x27; : &#x27;暫時無法確認計票或載入統計。稍後可重新連線，不會重複計票。&#x27;;
+      statsStatus.textContent = result?.error === &#x27;storage_unavailable&#x27; ? &#x27;目前無法保存首次紀錄，因此無法計票或載入統計。你仍可照常玩遊戲。&#x27; : &#x27;暫時無法確認計票或載入統計。稍後可重新連線，不會重複計票。&#x27;;
       return;
     }
     const bluePercent = c.total ? Math.round(c.blue / c.total * 1000) / 10 : null;
@@ -1852,8 +1850,8 @@ html&gt;body{padding:0}&lt;/style&gt;
       find(&#x27;[data-stats-bar-&#x27; + color + &#x27;]&#x27;).style.width = (percent || 0) + &#x27;%&#x27;;
     }
     find(&#x27;[data-stats-total]&#x27;).textContent = c.total ? &#x27;已收到 &#x27; + c.total + &#x27; 份禮物&#x27; : &#x27;還沒有人送出禮物&#x27;;
-    statsStatus.textContent = result.status === &#x27;storage_unavailable&#x27; ? &#x27;這個瀏覽器無法保存首次紀錄，因此這次未計票；上方仍可查看大家的統計。&#x27; :
-      result.status === &#x27;counted&#x27; ? &#x27;已計入這個瀏覽器第一次寄出的&#x27; + (result.choice === &#x27;blue&#x27; ? &#x27;藍色&#x27; : &#x27;粉紅色&#x27;) + &#x27;禮物 ♡&#x27; : &#x27;這是目前收到的禮物統計。&#x27;;
+    statsStatus.textContent = result.status === &#x27;storage_unavailable&#x27; ? &#x27;目前無法保存首次紀錄，因此這次未計票；上方仍可查看大家的統計。&#x27; :
+      result.status === &#x27;counted&#x27; ? &#x27;已計入你第一次寄出的&#x27; + (result.choice === &#x27;blue&#x27; ? &#x27;藍色&#x27; : &#x27;粉紅色&#x27;) + &#x27;禮物 ♡&#x27; : &#x27;這是目前收到的禮物統計。&#x27;;
   }
   function updateStats() {
     if (statsJob) return statsJob;
@@ -1915,9 +1913,9 @@ html&gt;body{padding:0}&lt;/style&gt;
       delivered = true;
       find(&#x27;[data-shipment]&#x27;).hidden = true;
       find(&#x27;[data-reply-preview]&#x27;).hidden = false;
-      find(&#x27;[data-delivery-eyebrow]&#x27;).textContent = &#x27;禮物送達 · 寶寶回信了&#x27;;
+      find(&#x27;[data-delivery-eyebrow]&#x27;).hidden = true;
       find(&#x27;[data-delivery-heading]&#x27;).textContent = &#x27;寶寶寄來了回信。&#x27;;
-      find(&#x27;[data-chosen-caption]&#x27;).textContent = &#x27;你的禮物，寶寶收到了！&#x27;;
+      find(&#x27;[data-chosen-caption]&#x27;).hidden = true;
       find(&#x27;[data-delivery-note]&#x27;).textContent = &#x27;回信裡，藏著寶寶想告訴你的小祕密。&#x27;;
       button.hidden = true;
       const reply = find(&#x27;[data-action=&quot;reply&quot;]&#x27;);
