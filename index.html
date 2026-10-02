@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src https://script.google.com https://script.googleusercontent.com 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data: https://script.google.com https://script.googleusercontent.com; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>一封來自寶寶的信</title>
 <meta name="description" content="寶寶寄來了一封信，邀請你送上一份心意。點開看看吧。">
 <meta property="og:title" content="一封來自寶寶的信">
@@ -1636,6 +1636,19 @@ html&gt;body{padding:0}&lt;/style&gt;
         &lt;div class=&quot;blg-photo-fallback&quot; data-photo-fallback hidden&gt;&lt;span aria-hidden=&quot;true&quot;&gt;👶&lt;/span&gt;&lt;p&gt;先送你一個小小的抱抱 ♡&lt;/p&gt;&lt;/div&gt;
       &lt;/div&gt;
       &lt;p class=&quot;blg-copy&quot;&gt;禮物收到了，謝謝你！&lt;br&gt;期待和大家見面。&lt;/p&gt;
+      &lt;section class=&quot;blg-stats&quot; aria-labelledby=&quot;blg-stats-title&quot;&gt;
+        &lt;h3 id=&quot;blg-stats-title&quot;&gt;大家送來的禮物&lt;/h3&gt;
+        &lt;div data-stats-results hidden&gt;
+          &lt;div class=&quot;blg-stat-heading&quot;&gt;&lt;span&gt;藍色禮物&lt;/span&gt;&lt;strong data-stats-blue&gt;&lt;/strong&gt;&lt;/div&gt;
+          &lt;div class=&quot;blg-stat-track&quot;&gt;&lt;div class=&quot;blg-stat-blue&quot; data-stats-bar-blue&gt;&lt;/div&gt;&lt;/div&gt;
+          &lt;div class=&quot;blg-stat-heading&quot;&gt;&lt;span&gt;粉紅色禮物&lt;/span&gt;&lt;strong data-stats-pink&gt;&lt;/strong&gt;&lt;/div&gt;
+          &lt;div class=&quot;blg-stat-track&quot;&gt;&lt;div class=&quot;blg-stat-pink&quot; data-stats-bar-pink&gt;&lt;/div&gt;&lt;/div&gt;
+          &lt;p class=&quot;blg-stats-total&quot; data-stats-total&gt;&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;p class=&quot;blg-stats-status&quot; data-stats-status role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;正在確認禮物與載入統計…&lt;/p&gt;
+        &lt;button type=&quot;button&quot; class=&quot;blg-stats-refresh&quot; data-stats-refresh&gt;更新統計&lt;/button&gt;
+        &lt;p class=&quot;blg-stats-note&quot;&gt;同一個瀏覽器只計第一次寄出，重玩不會改票。&lt;br&gt;統計從功能啟用後開始。&lt;/p&gt;
+      &lt;/section&gt;
       &lt;div class=&quot;blg-ending&quot;&gt;一封信，送來一位新家人&lt;/div&gt;
     &lt;/section&gt;
 
@@ -1744,6 +1757,19 @@ html&gt;body{padding:0}&lt;/style&gt;
   #baby-letter-gift-reveal .blg-celebrate .blg-celebration span { animation: blg-confetti-fall 2s ease-out var(--blg-delay) 1 both; }
   #baby-letter-gift-reveal .blg-ending { color: var(--blg-caramel); font-size: 12px; letter-spacing: .1em; margin-top: 20px; }
   #baby-letter-gift-reveal .blg-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  #baby-letter-gift-reveal .blg-stats { margin-top: 26px; padding: 19px 16px; border: 1px solid var(--blg-line); border-radius: 16px; background: var(--blg-paper); text-align: left; }
+  #baby-letter-gift-reveal .blg-stats h3 { margin: 0 0 18px; font-size: 17px; font-weight: 600; text-align: center; }
+  #baby-letter-gift-reveal .blg-stat-heading { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; margin-bottom: 7px; }
+  #baby-letter-gift-reveal .blg-stat-heading strong { font-weight: 600; white-space: nowrap; }
+  #baby-letter-gift-reveal .blg-stat-track { height: 10px; border-radius: 6px; overflow: hidden; background: var(--blg-line); margin-bottom: 16px; }
+  #baby-letter-gift-reveal .blg-stat-track &gt; div { height: 100%; width: 0; border-radius: 6px; }
+  #baby-letter-gift-reveal .blg-stat-blue { background: var(--blg-blue); }
+  #baby-letter-gift-reveal .blg-stat-pink { background: var(--blg-pink); }
+  #baby-letter-gift-reveal .blg-stats-total { margin: 0; text-align: center; font-size: 13px; }
+  #baby-letter-gift-reveal .blg-stats-status { color: var(--blg-muted); font-size: 12px; line-height: 1.7; margin: 12px 0; text-align: center; }
+  #baby-letter-gift-reveal .blg-stats-refresh { display: block; margin: auto; min-height: 40px; padding: 8px 18px; border: 1px solid var(--blg-line); border-radius: 10px; background: var(--blg-mint); color: var(--blg-mint-deep); cursor: pointer; font-size: 12px; }
+  #baby-letter-gift-reveal .blg-stats-refresh:disabled { opacity: .55; cursor: wait; }
+  #baby-letter-gift-reveal .blg-stats-note { margin: 13px 0 0; font-size: 10px; line-height: 1.7; text-align: center; color: var(--blg-muted); }
   @keyframes blg-parcel-away { from { opacity: 1; transform: translate(0, 0) scale(1); } to { opacity: 0; transform: translate(90px, -25px) scale(.6); } }
   @keyframes blg-confetti-fall { 0% { opacity: 0; transform: translateY(0) rotate(0); } 15% { opacity: .65; } 75% { opacity: .5; } 100% { opacity: 0; transform: translateY(225px) rotate(180deg); } }
   @media (max-width: 380px) {
@@ -1782,6 +1808,62 @@ html&gt;body{padding:0}&lt;/style&gt;
   let stage = &#x27;intro&#x27;;
   let sending = false;
   let delivered = false;
+  // A private channel works with the existing sandbox; requests wait for its handshake.
+  let statsPort = null, statsNextId = 0;
+  const statsPending = new Map();
+  window.addEventListener(&#x27;message&#x27;, event =&gt; {
+    if (event.source !== parent || event.data?.type !== &#x27;baby-gift-stats-initialize&#x27; || statsPort || event.ports.length !== 1) return;
+    statsPort = event.ports[0];
+    statsPort.onmessage = message =&gt; {
+      const data = message.data;
+      if (!data || !Number.isSafeInteger(data.id)) return;
+      const entry = statsPending.get(data.id);
+      if (!entry) return;
+      clearTimeout(entry.timer);
+      statsPending.delete(data.id);
+      entry.resolve(data.result);
+    };
+    for (const entry of statsPending.values()) statsPort.postMessage(entry.message);
+  });
+  const statsRequest = (type, choice) =&gt; new Promise(resolve =&gt; {
+    if (statsPending.size &gt;= 4) return resolve({ ok: false, error: &#x27;busy&#x27; });
+    const id = ++statsNextId, message = { id, type, choice };
+    const timer = setTimeout(() =&gt; { statsPending.delete(id); resolve({ ok: false, error: &#x27;unconfirmed&#x27; }); }, 65000);
+    statsPending.set(id, { resolve, timer, message });
+    if (statsPort) statsPort.postMessage(message);
+  });
+  let statsJob = null;
+  const statsStatus = find(&#x27;[data-stats-status]&#x27;);
+  const statsButton = find(&#x27;[data-stats-refresh]&#x27;);
+  function renderStats(result) {
+    const c = result &amp;&amp; result.counts;
+    const valid = result?.ok === true &amp;&amp; c &amp;&amp; [&#x27;blue&#x27;, &#x27;pink&#x27;, &#x27;total&#x27;].every(k =&gt; Number.isSafeInteger(c[k]) &amp;&amp; c[k] &gt;= 0) &amp;&amp; c.blue + c.pink === c.total;
+    find(&#x27;[data-stats-results]&#x27;).hidden = !valid;
+    statsButton.disabled = false;
+    statsButton.textContent = valid ? &#x27;更新統計&#x27; : &#x27;重新連線&#x27;;
+    if (!valid) {
+      statsStatus.textContent = result?.error === &#x27;storage_unavailable&#x27; ? &#x27;這個瀏覽器無法保存首次紀錄，目前無法計票或載入統計。你仍可照常玩遊戲。&#x27; : &#x27;暫時無法確認計票或載入統計。稍後可重新連線，不會重複計票。&#x27;;
+      return;
+    }
+    const bluePercent = c.total ? Math.round(c.blue / c.total * 1000) / 10 : null;
+    const pinkPercent = c.total ? Math.round((100 - bluePercent) * 10) / 10 : null;
+    for (const [color, percent] of [[&#x27;blue&#x27;, bluePercent], [&#x27;pink&#x27;, pinkPercent]]) {
+      find(&#x27;[data-stats-&#x27; + color + &#x27;]&#x27;).textContent = c[color] + &#x27; 份 · &#x27; + (percent === null ? &#x27;—&#x27; : percent.toFixed(1) + &#x27;%&#x27;);
+      find(&#x27;[data-stats-bar-&#x27; + color + &#x27;]&#x27;).style.width = (percent || 0) + &#x27;%&#x27;;
+    }
+    find(&#x27;[data-stats-total]&#x27;).textContent = c.total ? &#x27;已收到 &#x27; + c.total + &#x27; 份禮物&#x27; : &#x27;還沒有人送出禮物&#x27;;
+    statsStatus.textContent = result.status === &#x27;storage_unavailable&#x27; ? &#x27;這個瀏覽器無法保存首次紀錄，因此這次未計票；上方仍可查看大家的統計。&#x27; :
+      result.status === &#x27;counted&#x27; ? &#x27;已計入這個瀏覽器第一次寄出的&#x27; + (result.choice === &#x27;blue&#x27; ? &#x27;藍色&#x27; : &#x27;粉紅色&#x27;) + &#x27;禮物 ♡&#x27; : &#x27;這是目前收到的禮物統計。&#x27;;
+  }
+  function updateStats() {
+    if (statsJob) return statsJob;
+    statsStatus.textContent = &#x27;正在確認禮物與載入統計…&#x27;;
+    statsButton.disabled = true;
+    statsJob = statsRequest(&#x27;vote&#x27;, selected).then(renderStats).catch(() =&gt; renderStats(null)).finally(() =&gt; { statsJob = null; });
+    return statsJob;
+  }
+  statsButton.addEventListener(&#x27;click&#x27;, updateStats);
+
   const show = (name, message) =&gt; {
     stage = name;
     root.querySelectorAll(&#x27;[data-screen]&#x27;).forEach(screen =&gt; { screen.hidden = screen.dataset.screen !== name; });
@@ -1821,6 +1903,7 @@ html&gt;body{padding:0}&lt;/style&gt;
   find(&#x27;[data-action=&quot;send&quot;]&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {
     if (stage !== &#x27;send&#x27; || sending) return;
     sending = true;
+    updateStats();
     const button = find(&#x27;[data-action=&quot;send&quot;]&#x27;);
     button.disabled = true;
     button.textContent = &#x27;禮物正在送往寶寶身邊…&#x27;;
@@ -2438,6 +2521,159 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 "></iframe>
+<script>
+(() => {
+  'use strict';
+  const endpoint = 'https://script.google.com/macros/s/AKfycbxbkmYfIMHkZUHiMsS2O61_KTvs_DI9gaaQJfiwXIbKokmSfzO1Gj3ZkVeSaDJwCKcV/exec';
+  const dataset = 'live';
+  /* A stable browser receipt is saved before any request; failed requests reuse it. */
+function createGiftStatsClient(options) {
+  const { storage, locks, uuid, transport, dataset = 'live' } = options;
+  const key = 'baby-letter-game:first-vote:v1' + (dataset === 'test' ? ':test' : '');
+  const validId = id => typeof id === 'string' && /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(id);
+  const validChoice = value => value === 'blue' || value === 'pink';
+  let inFlight = null;
+  function saved() {
+    const raw = storage.getItem(key);
+    if (raw === null) return null;
+    const record = JSON.parse(raw);
+    if (!record || record.version !== 1 || !validId(record.id) || !validChoice(record.choice) || typeof record.confirmed !== 'boolean') throw new Error('storage_unavailable');
+    return record;
+  }
+  async function locked(fn) {
+    if (!storage || !locks || typeof locks.request !== 'function') throw new Error('storage_unavailable');
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 3000);
+    try { return await locks.request(key, { signal: controller.signal }, fn); }
+    catch { throw new Error('storage_unavailable'); }
+    finally { clearTimeout(timer); }
+  }
+  function validate(value, id) {
+    const c = value && value.counts, r = value && value.receipt;
+    if (!value || value.ok !== true || value.dataset !== dataset || value.id !== id || !c || !r ||
+        !['blue', 'pink', 'total'].every(k => Number.isSafeInteger(c[k]) && c[k] >= 0 && c[k] <= 10000) ||
+        c.blue + c.pink !== c.total || typeof r.accepted !== 'boolean' ||
+        (r.accepted ? (!id || !validChoice(r.choice)) : r.choice !== null)) throw new Error('unavailable');
+    return value;
+  }
+  async function read(id) { return validate(await transport.read({ dataset, id }), id); }
+  async function submit(choice) {
+    if (!validChoice(choice)) return { ok: false, error: 'invalid_choice' };
+    let record;
+    try {
+      record = await locked(() => {
+        let current = saved();
+        if (!current) {
+          current = { version: 1, id: uuid(), choice, confirmed: false };
+          if (!validId(current.id)) throw new Error('storage_unavailable');
+        }
+        storage.setItem(key, JSON.stringify(current));
+        if (storage.getItem(key) !== JSON.stringify(current)) throw new Error('storage_unavailable');
+        return current;
+      });
+    } catch {
+      try { return { ...await read(null), status: 'storage_unavailable' }; }
+      catch { return { ok: false, error: 'storage_unavailable' }; }
+    }
+    for (let attempt = 0; attempt < 2; attempt++) {
+      if (!record.confirmed) {
+        try { await transport.post({ action: 'vote', dataset, id: record.id, choice: record.choice }); }
+        catch { /* A timeout may still have written the vote. Always check its receipt. */ }
+      }
+      try {
+        const result = await read(record.id);
+        if (result.receipt.accepted) {
+          if (result.receipt.choice !== record.choice) return { ok: false, error: 'receipt_mismatch' };
+          try {
+            await locked(() => {
+              const current = saved();
+              if (current && current.id === record.id && current.choice === record.choice) {
+                storage.setItem(key, JSON.stringify({ ...current, confirmed: true }));
+              }
+            });
+          } catch { /* The original durable receipt remains safe to retry. */ }
+          return { ...result, status: 'counted', choice: record.choice };
+        }
+      } catch { /* Retry the exact same first-vote payload, never a new identity. */ }
+    }
+    return { ok: false, error: 'unconfirmed' };
+  }
+  return {
+    vote(choice) {
+      if (!inFlight) inFlight = submit(choice).catch(() => ({ ok: false, error: 'unavailable' })).finally(() => { inFlight = null; });
+      return inFlight;
+    },
+    async stats() {
+      try { return { ...await read(null), status: 'readonly' }; }
+      catch { return { ok: false, error: 'unavailable' }; }
+    }
+  };
+}
+if (typeof module !== 'undefined' && module.exports) module.exports = { createGiftStatsClient };
+
+  function read(query) {
+    return new Promise((resolve, reject) => {
+      const name = 'blgStats_' + crypto.randomUUID().replaceAll('-', '');
+      const url = new URL(endpoint);
+      url.searchParams.set('dataset', query.dataset);
+      if (query.id) url.searchParams.set('id', query.id);
+      url.searchParams.set('callback', name);
+      url.searchParams.set('_', String(Date.now()));
+      const script = document.createElement('script');
+      let settled = false;
+      const finish = (error, data) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        script.remove();
+        // A late response after timeout remains harmless until its callback is retired.
+        globalThis[name] = () => {};
+        setTimeout(() => { delete globalThis[name]; }, 60000);
+        error ? reject(error) : resolve(data);
+      };
+      const timer = setTimeout(() => finish(new Error('timeout')), 14000);
+      globalThis[name] = value => finish(null, value);
+      script.onerror = () => finish(new Error('network'));
+      script.referrerPolicy = 'no-referrer';
+      script.src = url.href;
+      document.head.appendChild(script);
+    });
+  }
+  async function post(body) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 10000);
+    try {
+      await fetch(endpoint, { method: 'POST', mode: 'no-cors', credentials: 'omit',
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+        body: JSON.stringify(body), signal: controller.signal });
+    } finally { clearTimeout(timer); }
+  }
+  let storage = null;
+  try { storage = globalThis.localStorage; } catch { /* Game stays available. */ }
+  const client = createGiftStatsClient({ storage, locks: navigator.locks,
+    uuid: () => crypto.randomUUID(), transport: { read, post }, dataset });
+  const frame = document.getElementById('codex-visualization');
+  if (!frame) return;
+  frame.addEventListener('load', () => {
+    const channel = new MessageChannel();
+    let busy = false;
+    channel.port1.onmessage = async event => {
+      const data = event.data;
+      if (!data || !Number.isSafeInteger(data.id) || data.id < 1 || !['vote', 'stats'].includes(data.type)) return;
+      if (data.type === 'vote' && !['blue', 'pink'].includes(data.choice)) return;
+      if (busy) { channel.port1.postMessage({ id: data.id, result: { ok: false, error: 'busy' } }); return; }
+      busy = true;
+      try {
+        const result = await (data.type === 'vote' ? client.vote(data.choice) : client.stats());
+        channel.port1.postMessage({ id: data.id, result });
+      } catch { channel.port1.postMessage({ id: data.id, result: { ok: false, error: 'unavailable' } }); }
+      finally { busy = false; }
+    };
+    frame.contentWindow.postMessage({ type: 'baby-gift-stats-initialize' }, '*', [channel.port2]);
+  }, { once: true });
+})();
+
+</script>
 <script>(() => {
   const frame = document.getElementById("codex-visualization");
   if (!(frame instanceof HTMLIFrameElement)) {
