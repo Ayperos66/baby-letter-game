@@ -1647,7 +1647,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         &lt;/div&gt;
         &lt;p class=&quot;blg-stats-status&quot; data-stats-status role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;正在確認禮物與載入統計…&lt;/p&gt;
         &lt;button type=&quot;button&quot; class=&quot;blg-stats-refresh&quot; data-stats-refresh&gt;更新統計&lt;/button&gt;
-        &lt;p class=&quot;blg-stats-note&quot;&gt;只計第一次寄出，重玩不會改票。&lt;/p&gt;
+        &lt;p class=&quot;blg-stats-note&quot;&gt;本輪只計第一次寄出，重玩不會改票。&lt;/p&gt;
       &lt;/section&gt;
       &lt;div class=&quot;blg-ending&quot;&gt;一封信，送來一位新家人&lt;/div&gt;
     &lt;/section&gt;
@@ -1826,7 +1826,7 @@ html&gt;body{padding:0}&lt;/style&gt;
   const statsRequest = (type, choice) =&gt; new Promise(resolve =&gt; {
     if (statsPending.size &gt;= 4) return resolve({ ok: false, error: &#x27;busy&#x27; });
     const id = ++statsNextId, message = { id, type, choice };
-    const timer = setTimeout(() =&gt; { statsPending.delete(id); resolve({ ok: false, error: &#x27;unconfirmed&#x27; }); }, 65000);
+    const timer = setTimeout(() =&gt; { statsPending.delete(id); resolve({ ok: false, error: &#x27;unconfirmed&#x27; }); }, 80000);
     statsPending.set(id, { resolve, timer, message });
     if (statsPort) statsPort.postMessage(message);
   });
@@ -1840,7 +1840,8 @@ html&gt;body{padding:0}&lt;/style&gt;
     statsButton.disabled = false;
     statsButton.textContent = valid ? &#x27;更新統計&#x27; : &#x27;重新連線&#x27;;
     if (!valid) {
-      statsStatus.textContent = result?.error === &#x27;storage_unavailable&#x27; ? &#x27;目前無法保存首次紀錄，因此無法計票或載入統計。你仍可照常玩遊戲。&#x27; : &#x27;暫時無法確認計票或載入統計。稍後可重新連線，不會重複計票。&#x27;;
+      statsStatus.textContent = result?.error === &#x27;round_changed&#x27; ? &#x27;投票已重新開始，請再按一次重新連線。&#x27; :
+        result?.error === &#x27;storage_unavailable&#x27; ? &#x27;目前無法保存首次紀錄，因此無法計票或載入統計。你仍可照常玩遊戲。&#x27; : &#x27;暫時無法確認計票或載入統計。稍後可重新連線，不會重複計票。&#x27;;
       return;
     }
     const bluePercent = c.total ? Math.round(c.blue / c.total * 1000) / 10 : null;
@@ -2524,18 +2525,29 @@ html&gt;body{padding:0}&lt;/style&gt;
   'use strict';
   const endpoint = 'https://script.google.com/macros/s/AKfycbxbkmYfIMHkZUHiMsS2O61_KTvs_DI9gaaQJfiwXIbKokmSfzO1Gj3ZkVeSaDJwCKcV/exec';
   const dataset = 'live';
-  /* A stable browser receipt is saved before any request; failed requests reuse it. */
+  /* Stable identity, one durable first choice per server-owned round. */
 function createGiftStatsClient(options) {
   const { storage, locks, uuid, transport, dataset = 'live' } = options;
+  // Keep the existing key/lock so old tabs cannot form an independent identity.
   const key = 'baby-letter-game:first-vote:v1' + (dataset === 'test' ? ':test' : '');
   const validId = id => typeof id === 'string' && /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(id);
+  const validRound = round => round === 'initial' || validId(round);
   const validChoice = value => value === 'blue' || value === 'pink';
+  const changed = () => ({ ok: false, error: 'round_changed' });
   let inFlight = null;
   function saved() {
     const raw = storage.getItem(key);
     if (raw === null) return null;
     const record = JSON.parse(raw);
-    if (!record || record.version !== 1 || !validId(record.id) || !validChoice(record.choice) || typeof record.confirmed !== 'boolean') throw new Error('storage_unavailable');
+    if (!record || ![1, 2].includes(record.version) || !validId(record.id) || !validChoice(record.choice) ||
+        typeof record.confirmed !== 'boolean' || (record.version === 2 &&
+        !(validRound(record.round) || (record.round === null && !record.confirmed)))) throw new Error('storage_unavailable');
+    return record;
+  }
+  function persist(record) {
+    const value = JSON.stringify(record);
+    storage.setItem(key, value);
+    if (storage.getItem(key) !== value) throw new Error('storage_unavailable');
     return record;
   }
   async function locked(fn) {
@@ -2548,53 +2560,76 @@ function createGiftStatsClient(options) {
   }
   function validate(value, id) {
     const c = value && value.counts, r = value && value.receipt;
-    if (!value || value.ok !== true || value.dataset !== dataset || value.id !== id || !c || !r ||
+    if (!value || value.ok !== true || value.dataset !== dataset || value.id !== id || !validRound(value.round) || !c || !r ||
         !['blue', 'pink', 'total'].every(k => Number.isSafeInteger(c[k]) && c[k] >= 0 && c[k] <= 10000) ||
         c.blue + c.pink !== c.total || typeof r.accepted !== 'boolean' ||
         (r.accepted ? (!id || !validChoice(r.choice)) : r.choice !== null)) throw new Error('unavailable');
     return value;
   }
   async function read(id) { return validate(await transport.read({ dataset, id }), id); }
+  async function storageFailure() {
+    try { return { ...await read(null), status: 'storage_unavailable' }; }
+    catch { return { ok: false, error: 'storage_unavailable' }; }
+  }
   async function submit(choice) {
     if (!validChoice(choice)) return { ok: false, error: 'invalid_choice' };
-    let record;
+    let initial, record;
+    try {
+      initial = await locked(() => {
+        const current = saved();
+        if (current) return current;
+        const id = uuid();
+        if (!validId(id)) throw new Error('storage_unavailable');
+        return persist({ version: 2, id, round: null, choice, confirmed: false });
+      });
+    } catch { return storageFailure(); }
+    // Discover the round BEFORE posting. Failed reads cannot resend an obsolete vote.
+    let before;
+    try { before = await read(initial.id); }
+    catch { return { ok: false, error: 'unavailable' }; }
     try {
       record = await locked(() => {
-        let current = saved();
-        if (!current) {
-          current = { version: 1, id: uuid(), choice, confirmed: false };
-          if (!validId(current.id)) throw new Error('storage_unavailable');
-        }
-        storage.setItem(key, JSON.stringify(current));
-        if (storage.getItem(key) !== JSON.stringify(current)) throw new Error('storage_unavailable');
-        return current;
+        const current = saved();
+        if (!current || current.id !== initial.id) return changed();
+        if (current.version === 2 && current.round === before.round) return current;
+        if (current.version !== initial.version || current.round !== initial.round) return changed();
+        // Existing server rows remain counted during migration; missing legacy rows may vote again.
+        return persist({ version: 2, id: current.id, round: before.round,
+          choice: before.receipt.accepted ? before.receipt.choice :
+            (current.version === 2 && current.round === null ? current.choice : choice),
+          confirmed: before.receipt.accepted });
       });
-    } catch {
-      try { return { ...await read(null), status: 'storage_unavailable' }; }
-      catch { return { ok: false, error: 'storage_unavailable' }; }
-    }
+    } catch { return storageFailure(); }
+    if (record.ok === false) return record;
     for (let attempt = 0; attempt < 2; attempt++) {
       if (!record.confirmed) {
-        try { await transport.post({ action: 'vote', dataset, id: record.id, choice: record.choice }); }
-        catch { /* A timeout may still have written the vote. Always check its receipt. */ }
+        try { await transport.post({ action: 'vote', dataset, id: record.id, choice: record.choice, round: record.round }); }
+        catch { /* A timeout may have committed this exact round's vote; check its receipt. */ }
       }
       try {
         const result = await read(record.id);
+        if (result.round !== record.round) return changed();
         if (result.receipt.accepted) {
           if (result.receipt.choice !== record.choice) return { ok: false, error: 'receipt_mismatch' };
           try {
-            await locked(() => {
+            const updated = await locked(() => {
               const current = saved();
-              if (current && current.id === record.id && current.choice === record.choice) {
-                storage.setItem(key, JSON.stringify({ ...current, confirmed: true }));
-              }
+              if (!current || current.id !== record.id || current.round !== record.round || current.choice !== record.choice) return false;
+              persist({ ...current, confirmed: true });
+              return true;
             });
-          } catch { /* The original durable receipt remains safe to retry. */ }
+            if (!updated) return changed();
+          } catch { /* The durable pending receipt remains safe to retry in the same round. */ }
           return { ...result, status: 'counted', choice: record.choice };
         }
-        // A cleared confirmed vote must not be restored or block current totals.
-        if (record.confirmed) return { ...result, status: 'readonly' };
-      } catch { /* Retry the exact same first-vote payload, never a new identity. */ }
+        if (record.confirmed) {
+          const unchanged = await locked(() => {
+            const current = saved();
+            return current && current.id === record.id && current.round === record.round && current.choice === record.choice;
+          });
+          return unchanged ? { ...result, status: 'readonly' } : changed();
+        }
+      } catch { /* Bounded retry, always with the same round, identity, and first choice. */ }
     }
     return { ok: false, error: 'unconfirmed' };
   }
