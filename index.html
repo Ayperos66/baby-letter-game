@@ -2592,6 +2592,8 @@ function createGiftStatsClient(options) {
           } catch { /* The original durable receipt remains safe to retry. */ }
           return { ...result, status: 'counted', choice: record.choice };
         }
+        // A cleared confirmed vote must not be restored or block current totals.
+        if (record.confirmed) return { ...result, status: 'readonly' };
       } catch { /* Retry the exact same first-vote payload, never a new identity. */ }
     }
     return { ok: false, error: 'unconfirmed' };
